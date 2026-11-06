@@ -17,9 +17,11 @@ cask "perch" do
   app "Perch.app"
 
   # Perch isn't notarized yet: clear the download flag so macOS doesn't block it on first launch.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Perch.app"]
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:           ["-dr", "com.apple.quarantine", "{{appdir}}/Perch.app"],
+        writable_paths: ["Perch.app"],
+        writable_base:  :appdir
   end
 
   uninstall quit: "com.anaydas.Perch"
